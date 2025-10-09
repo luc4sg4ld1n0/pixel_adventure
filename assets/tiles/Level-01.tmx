@@ -3,7 +3,7 @@
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <properties>
-   <property name="BackgroundColor" value="Gray"/>
+   <property name="BackgroundColor" value="Green"/>
   </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -47,13 +47,13 @@
  <objectgroup id="2" name="Spawnpoints">
   <object id="1" name="Player" type="Player" x="32" y="272" width="32" height="32"/>
   <object id="47" name="Strawberry" type="Fruit" x="144" y="304" width="32" height="32"/>
-  <object id="62" type="Saw" x="352" y="320" width="32" height="32">
+  <object id="62" name="Chicken" type="Chicken" x="352" y="304" width="32" height="32">
    <properties>
     <property name="isVertical" type="bool" value="false"/>
-    <property name="offNeg" type="float" value="4"/>
-    <property name="offPos" type="float" value="4"/>
+    <property name="offNeg" type="float" value="19"/>
+    <property name="offPos" type="float" value="11"/>
    </properties>
   </object>
-  <object id="72" type="Checkpoint" x="576" y="208" width="64" height="64"/>
+  <object id="72" name="Checkpoint" type="Checkpoint" x="576" y="208" width="64" height="64"/>
  </objectgroup>
 </map>

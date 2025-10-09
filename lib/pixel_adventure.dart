@@ -91,6 +91,16 @@ class PixelAdventure extends FlameGame
 
   void _loadLevel() {
     Future.delayed(const Duration(seconds: 1), () {
+      // Remove todos os componentes existentes (câmera e mundo anterior)
+      children.whereType<CameraComponent>().forEach(remove);
+      children.whereType<Level>().forEach(remove);
+
+      // Também remove o player se estiver como componente separado
+      children.whereType<Player>().forEach(remove);
+
+      // Reinicia o player para o estado inicial
+      player = Player();
+
       Level world = Level(
         player: player,
         levelName: levelNames[currentLevelIndex],

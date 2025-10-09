@@ -54,6 +54,7 @@ class Checkpoint extends SpriteAnimationComponent
     );
 
     await animationTicker?.completed;
+    animationTicker?.reset();
 
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache(
