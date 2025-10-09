@@ -20,6 +20,9 @@ class PixelAdventure extends FlameGame
   late JoystickComponent joystick;
   // controles mobile(true) e desktop(false)
   bool showControls = false;
+  bool playSounds = true;
+  double soundVolume = 1.0;
+
   List<String> levelNames = ['Level-01', 'Level-02', 'Level-03'];
   int currentLevelIndex = 0;
 
@@ -81,7 +84,8 @@ class PixelAdventure extends FlameGame
       currentLevelIndex++;
       _loadLevel();
     } else {
-      // acabaram as fases
+      currentLevelIndex = 0;
+      _loadLevel();
     }
   }
 
