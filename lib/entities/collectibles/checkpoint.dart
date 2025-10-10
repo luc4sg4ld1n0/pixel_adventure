@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:pixel_adventure/components/player.dart';
-import 'package:pixel_adventure/pixel_adventure.dart';
+import 'package:pixel_adventure/core/game/pixel_adventure.dart';
+import 'package:pixel_adventure/entities/player/player.dart';
 
 class Checkpoint extends SpriteAnimationComponent
-    with HasGameReference<PixelAdventure>, CollisionCallbacks {
+    with CollisionCallbacks, HasGameReference<PixelAdventure> {
   Checkpoint({super.position, super.size});
 
   @override
@@ -17,6 +17,7 @@ class Checkpoint extends SpriteAnimationComponent
         collisionType: CollisionType.passive,
       ),
     );
+
     priority = -1;
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache(

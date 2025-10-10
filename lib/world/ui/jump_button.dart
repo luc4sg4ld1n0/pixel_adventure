@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:pixel_adventure/pixel_adventure.dart';
+import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 
 class JumpButton extends SpriteComponent
-    with HasGameReference<PixelAdventure>, TapCallbacks {
+    with TapCallbacks, HasGameReference<PixelAdventure> {
   JumpButton();
 
-  final margin = 32;
-  final buttonSize = 64;
+  static const double margin = 32;
+  static const double buttonSize = 64;
 
   @override
   FutureOr<void> onLoad() {

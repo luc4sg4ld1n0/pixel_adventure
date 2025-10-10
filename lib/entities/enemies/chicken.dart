@@ -1,25 +1,23 @@
 import 'dart:ui';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:pixel_adventure/components/player.dart';
-import 'package:pixel_adventure/pixel_adventure.dart';
+import 'package:pixel_adventure/core/utils/constants.dart';
+import 'package:pixel_adventure/entities/player/player.dart';
+import 'enemy_base.dart';
 
-enum State { idle, run, hit }
+enum ChickenState { idle, run, hit }
 
-class Chicken extends SpriteAnimationGroupComponent
-    with HasGameReference<PixelAdventure>, CollisionCallbacks {
+class Chicken extends Enemy {
   final double offNeg;
   final double offPos;
 
   Chicken({super.position, super.size, this.offNeg = 0, this.offPos = 0});
 
-  static const stepTime = 0.05;
-  static const tileSize = 16;
-  static const runSpeed = 60;
-  static const _bounceHeight = 260.0;
-  final textureSize = Vector2(32, 34);
+  static const double stepTime = 0.05;
+  static const double runSpeed = 60;
+  static const double bounceHeight = 260.0;
+  final Vector2 textureSize = Vector2(32, 34);
 
   Vector2 velocity = Vector2.zero();
   double rangeNeg = 0;
@@ -48,7 +46,6 @@ class Chicken extends SpriteAnimationGroupComponent
       _updateState();
       _movement(dt);
     }
-
     super.update(dt);
   }
 
@@ -58,12 +55,12 @@ class Chicken extends SpriteAnimationGroupComponent
     _hitAnimation = _spriteAnimation('Hit', 5)..loop = false;
 
     animations = {
-      State.idle: _idleAnimation,
-      State.run: _runAnimation,
-      State.hit: _hitAnimation,
+      ChickenState.idle: _idleAnimation,
+      ChickenState.run: _runAnimation,
+      ChickenState.hit: _hitAnimation,
     };
 
-    current = State.idle;
+    current = ChickenState.idle;
   }
 
   SpriteAnimation _spriteAnimation(String state, int amount) {
@@ -78,8 +75,8 @@ class Chicken extends SpriteAnimationGroupComponent
   }
 
   void _calculateRange() {
-    rangeNeg = position.x - offNeg * tileSize;
-    rangePos = position.x + offPos * tileSize;
+    rangeNeg = position.x - offNeg * GameConstants.tileSize;
+    rangePos = position.x + offPos * GameConstants.tileSize;
   }
 
   void _movement(double dt) {
@@ -96,7 +93,6 @@ class Chicken extends SpriteAnimationGroupComponent
     }
 
     moveDirection = lerpDouble(moveDirection, targetDirection, 0.1) ?? 1;
-
     position.x += velocity.x * dt;
   }
 
@@ -109,7 +105,7 @@ class Chicken extends SpriteAnimationGroupComponent
   }
 
   void _updateState() {
-    current = (velocity.x != 0) ? State.run : State.idle;
+    current = (velocity.x != 0) ? ChickenState.run : ChickenState.idle;
 
     if ((moveDirection > 0 && scale.x > 0) ||
         (moveDirection < 0 && scale.x < 0)) {
@@ -117,14 +113,15 @@ class Chicken extends SpriteAnimationGroupComponent
     }
   }
 
+  @override
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
       if (game.playSounds) {
         FlameAudio.play('bounce.wav', volume: game.soundVolume);
       }
       gotStomped = true;
-      current = State.hit;
-      player.velocity.y = -_bounceHeight;
+      current = ChickenState.hit;
+      player.velocity.y = -bounceHeight;
       await animationTicker?.completed;
       removeFromParent();
     } else {

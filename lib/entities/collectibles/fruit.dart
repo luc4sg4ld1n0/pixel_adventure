@@ -2,16 +2,21 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:pixel_adventure/components/custom_hitbox.dart';
-import 'package:pixel_adventure/pixel_adventure.dart';
+import 'package:pixel_adventure/core/game/pixel_adventure.dart';
+import 'package:pixel_adventure/entities/player/player.dart';
 
 class Fruit extends SpriteAnimationComponent
-    with HasGameReference<PixelAdventure>, CollisionCallbacks {
+    with CollisionCallbacks, HasGameReference<PixelAdventure> {
   final String fruit;
   Fruit({this.fruit = 'apple', super.position, super.size});
 
-  final double stepTime = 0.05;
-  final hitBox = CustomHitbox(offsetX: 10, offsetY: 10, width: 12, height: 12);
+  static const double stepTime = 0.05;
+  final CustomHitbox hitBox = CustomHitbox(
+    offsetX: 10,
+    offsetY: 10,
+    width: 12,
+    height: 12,
+  );
   bool collected = false;
 
   @override

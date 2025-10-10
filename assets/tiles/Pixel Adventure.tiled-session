@@ -14,7 +14,7 @@
                 3
             ],
             "scale": 1.7975781249999998,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 318.20591942283454,
                 "y": 194.42826719979143
@@ -22,10 +22,11 @@
         },
         "Level-02.tmx": {
             "expandedObjectLayers": [
+                2,
                 3
             ],
             "scale": 1.821328125,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 320.0960837301076,
                 "y": 184.20623686355253
@@ -37,7 +38,7 @@
                 3
             ],
             "scale": 1.5804,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 302.45507466464187,
                 "y": 199.00025310048085

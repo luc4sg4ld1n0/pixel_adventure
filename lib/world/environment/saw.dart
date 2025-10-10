@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:pixel_adventure/pixel_adventure.dart';
+import 'package:pixel_adventure/core/game/pixel_adventure.dart';
+import 'package:pixel_adventure/core/utils/constants.dart';
 
 class Saw extends SpriteAnimationComponent
-    with HasGameReference<PixelAdventure> {
+    with CollisionCallbacks, HasGameReference<PixelAdventure> {
   final bool isVertical;
   final double offNeg;
   final double offPos;
@@ -18,8 +19,8 @@ class Saw extends SpriteAnimationComponent
   });
 
   static const double sawSpeed = 0.03;
-  static const moveSpeed = 50;
-  static const tileSize = 16;
+  static const double moveSpeed = 50;
+
   double moveDirection = 1;
   double rangeNeg = 0;
   double rangePos = 0;
@@ -30,11 +31,11 @@ class Saw extends SpriteAnimationComponent
     add(CircleHitbox());
 
     if (isVertical) {
-      rangeNeg = position.y - (offNeg * tileSize);
-      rangePos = position.y + (offPos * tileSize);
+      rangeNeg = position.y - (offNeg * GameConstants.tileSize);
+      rangePos = position.y + (offPos * GameConstants.tileSize);
     } else {
-      rangeNeg = position.x - (offNeg * tileSize);
-      rangePos = position.x + (offPos * tileSize);
+      rangeNeg = position.x - (offNeg * GameConstants.tileSize);
+      rangePos = position.x + (offPos * GameConstants.tileSize);
     }
 
     animation = SpriteAnimation.fromFrameData(
