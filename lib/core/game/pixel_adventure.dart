@@ -4,7 +4,11 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pixel_adventure/core/game/game_config.dart';
+import 'package:pixel_adventure/core/game/game_state.dart';
 import 'package:pixel_adventure/entities/player/player.dart';
+import 'package:pixel_adventure/entities/collectibles/checkpoint.dart';
+import 'package:pixel_adventure/screens/menu_screen.dart';
+import 'package:pixel_adventure/screens/game_complete_screen.dart';
 import 'package:pixel_adventure/world/level/level.dart';
 import 'package:pixel_adventure/world/ui/jump_button.dart';
 import 'package:pixel_adventure/world/ui/joystick_controller.dart';
@@ -27,68 +31,132 @@ class PixelAdventure extends FlameGame
   double soundVolume = GameConfig.soundVolume;
 
   int currentLevelIndex = 0;
+  GameState _currentState = GameState.menu;
+
+  late MenuScreen menuScreen;
+  late GameCompleteScreen gameCompleteScreen;
 
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
-    _loadLevel();
 
-    if (showControls) {
-      joystickController = JoystickController();
-      add(joystickController);
-      add(JumpButton());
-    }
+    // Inicializa as telas (mas não as ativa ainda)
+    menuScreen = MenuScreen();
+    gameCompleteScreen = GameCompleteScreen();
+
+    // Adiciona as telas ao jogo (mas inativas)
+    await add(menuScreen);
+    await add(gameCompleteScreen);
+
+    // Começa com o menu ativo
+    _setState(GameState.menu);
 
     return super.onLoad();
   }
 
+  void _setState(GameState newState) {
+    // Desativa a tela atual
+    switch (_currentState) {
+      case GameState.menu:
+        menuScreen.isActive = false;
+        break;
+      case GameState.playing:
+        _cleanCurrentLevel();
+        break;
+      case GameState.gameComplete:
+        gameCompleteScreen.isActive = false;
+        break;
+    }
+
+    // Ativa a nova tela
+    _currentState = newState;
+
+    switch (newState) {
+      case GameState.menu:
+        menuScreen.isActive = true;
+        break;
+      case GameState.playing:
+        _loadLevel();
+        break;
+      case GameState.gameComplete:
+        gameCompleteScreen.isActive = true;
+        break;
+    }
+  }
+
+  void startGame() {
+    currentLevelIndex = 0;
+    _setState(GameState.playing);
+  }
+
+  void goToMenu() {
+    _setState(GameState.menu);
+  }
+
+  void completeGame() {
+    _setState(GameState.gameComplete);
+  }
+
   @override
   void update(double dt) {
-    if (showControls) {
+    if (_currentState == GameState.playing && showControls) {
       joystickController.updateJoystick();
     }
     super.update(dt);
   }
 
   void loadNextLevel() {
-    // carregar a próxima fase
     if (currentLevelIndex < GameConfig.levelNames.length - 1) {
       currentLevelIndex++;
+      _loadLevel();
     } else {
-      currentLevelIndex = 0;
+      completeGame();
     }
-    _loadLevel();
   }
 
   void _loadLevel() {
-    // carregar uma nova fase
-    Future.delayed(const Duration(seconds: 1), () {
-      _cleanCurrentLevel();
+    _cleanCurrentLevel();
 
-      player = Player();
+    final world = Level(
+      player: player,
+      levelName: GameConfig.levelNames[currentLevelIndex],
+    );
 
-      final world = Level(
-        player: player,
-        levelName: GameConfig.levelNames[currentLevelIndex],
-      );
+    cam = CameraComponent.withFixedResolution(
+      world: world,
+      width: GameConfig.cameraWidth,
+      height: GameConfig.cameraHeight,
+    );
+    cam.viewfinder.anchor = Anchor.topLeft;
 
-      cam = CameraComponent.withFixedResolution(
-        world: world,
-        width: GameConfig.cameraWidth,
-        height: GameConfig.cameraHeight,
-      );
-      cam.viewfinder.anchor = Anchor.topLeft;
+    addAll([cam, world]);
 
-      addAll([cam, world]);
-    });
+    if (showControls) {
+      joystickController = JoystickController();
+      add(joystickController);
+      add(JumpButton());
+    }
   }
 
   void _cleanCurrentLevel() {
-    // limpa a fase para preparar para a próxima fase
-    children.whereType<CameraComponent>().forEach(remove);
-    children.whereType<Level>().forEach(remove);
-    children.whereType<Player>().forEach(remove);
-    children.whereType<JoystickController>().forEach(remove);
-    children.whereType<JoystickComponent>().forEach(remove);
+    final componentsToRemove = <Component>[];
+
+    for (final component in children) {
+      if (component is CameraComponent ||
+          component is Level ||
+          component is Player ||
+          component is JoystickController ||
+          component is JoystickComponent ||
+          component is JumpButton ||
+          component is Checkpoint) {
+        componentsToRemove.add(component);
+      }
+    }
+
+    if (componentsToRemove.isNotEmpty) {
+      removeAll(componentsToRemove);
+    }
+
+    player = Player();
   }
 }

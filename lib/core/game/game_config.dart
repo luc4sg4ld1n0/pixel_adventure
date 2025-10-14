@@ -1,5 +1,4 @@
 // configurações principais do jogo
-
 class GameConfig {
   // mostrar ou não controles da telatouch
   static const bool showControls = false;

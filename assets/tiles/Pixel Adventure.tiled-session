@@ -10,8 +10,8 @@
     "fileStates": {
         "Level-01.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.7975781249999998,
             "selectedLayer": 2,
@@ -22,8 +22,8 @@
         },
         "Level-02.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.821328125,
             "selectedLayer": 2,
@@ -34,8 +34,8 @@
         },
         "Level-03.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.5804,
             "selectedLayer": 2,
@@ -66,16 +66,17 @@
     "openFiles": [
         "Pixel Adventure.tsx",
         "Level-02.tmx",
-        "Level-01.tmx"
+        "Level-01.tmx",
+        "Level-03.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "float",
     "recentFiles": [
-        "Level-04.tmx",
-        "Level-01.tmx",
         "Pixel Adventure.tsx",
+        "Level-02.tmx",
         "Level-03.tmx",
-        "Level-02.tmx"
+        "Level-01.tmx",
+        "Level-04.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
