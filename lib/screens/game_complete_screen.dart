@@ -4,6 +4,7 @@ import 'package:pixel_adventure/core/game/screen_manager.dart';
 import 'package:pixel_adventure/core/components/button_component.dart';
 
 class GameCompleteScreen extends GameScreen {
+  late SpriteComponent background;
   late SpriteComponent congratulations;
   late SpriteComponent trophy;
   late ButtonComponent menuButton;
@@ -11,6 +12,7 @@ class GameCompleteScreen extends GameScreen {
 
   @override
   Future<void> onLoad() async {
+    _createBackground();
     _createCongratulations();
     _createTrophy();
     _createMenuButton();
@@ -22,8 +24,13 @@ class GameCompleteScreen extends GameScreen {
   void onEnter() {
     // Só adiciona os componentes se eles não estiverem já no parent
     if (!_screenComponents.any((c) => c.isMounted)) {
-      addAll([congratulations, trophy, menuButton]);
-      _screenComponents.addAll([congratulations, trophy, menuButton]);
+      addAll([background, congratulations, trophy, menuButton]);
+      _screenComponents.addAll([
+        background,
+        congratulations,
+        trophy,
+        menuButton,
+      ]);
     }
   }
 
@@ -39,6 +46,16 @@ class GameCompleteScreen extends GameScreen {
     _screenComponents.clear();
   }
 
+  void _createBackground() {
+    background = SpriteComponent(
+      sprite: Sprite(game.images.fromCache('Background/endBackground.png')),
+      size: game.size,
+      position: Vector2.zero(),
+      anchor: Anchor.topLeft,
+    );
+    background.priority = -100;
+  }
+
   void _createCongratulations() {
     congratulations = SpriteComponent(
       sprite: Sprite(game.images.fromCache('HUD/Congratulations.png')),
@@ -46,6 +63,7 @@ class GameCompleteScreen extends GameScreen {
       size: Vector2(300, 300),
       anchor: Anchor.center,
     );
+    congratulations.priority = -10;
   }
 
   void _createTrophy() {
@@ -55,6 +73,7 @@ class GameCompleteScreen extends GameScreen {
       size: Vector2(100, 100),
       anchor: Anchor.center,
     );
+    trophy.priority = -10;
   }
 
   void _createMenuButton() {
@@ -66,5 +85,6 @@ class GameCompleteScreen extends GameScreen {
         game.goToMenu();
       },
     );
+    menuButton.priority = 0;
   }
 }

@@ -4,12 +4,14 @@ import 'package:pixel_adventure/core/game/screen_manager.dart';
 import 'package:pixel_adventure/core/components/button_component.dart';
 
 class MenuScreen extends GameScreen {
+  late SpriteComponent background;
   late SpriteComponent title;
   late ButtonComponent startButton;
   final List<Component> _screenComponents = [];
 
   @override
   Future<void> onLoad() async {
+    _createBackground();
     _createTitle();
     _createStartButton();
 
@@ -20,8 +22,8 @@ class MenuScreen extends GameScreen {
   void onEnter() {
     // Só adiciona os componentes se eles não estiverem já no parent
     if (!_screenComponents.any((c) => c.isMounted)) {
-      addAll([title, startButton]);
-      _screenComponents.addAll([title, startButton]);
+      addAll([background, title, startButton]);
+      _screenComponents.addAll([background, title, startButton]);
     }
   }
 
@@ -37,6 +39,16 @@ class MenuScreen extends GameScreen {
     _screenComponents.clear();
   }
 
+  void _createBackground() {
+    background = SpriteComponent(
+      sprite: Sprite(game.images.fromCache('Background/titleBackground.png')),
+      size: game.size,
+      position: Vector2.zero(),
+      anchor: Anchor.topLeft,
+    );
+    background.priority = -100;
+  }
+
   void _createTitle() {
     title = SpriteComponent(
       sprite: Sprite(game.images.fromCache('HUD/Title.png')),
@@ -44,6 +56,7 @@ class MenuScreen extends GameScreen {
       size: Vector2(400, 400),
       anchor: Anchor.center,
     );
+    title.priority = -10;
   }
 
   void _createStartButton() {
@@ -55,5 +68,6 @@ class MenuScreen extends GameScreen {
         game.startGame();
       },
     );
+    startButton.priority = 0;
   }
 }

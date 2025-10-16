@@ -1,4 +1,6 @@
 // configurações principais do jogo
+import 'package:flame/game.dart';
+
 class GameConfig {
   // mostrar ou não controles da telatouch
   static const bool showControls = false;
@@ -12,4 +14,7 @@ class GameConfig {
   // tamanho da câmera do jogo
   static const double cameraWidth = 640;
   static const double cameraHeight = 360;
+
+  // resolução do jogo no formato 16:9
+  static Vector2 gameSize = Vector2(640, 360);
 }
