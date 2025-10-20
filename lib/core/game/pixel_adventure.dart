@@ -134,7 +134,6 @@ class PixelAdventure extends FlameGame
     if (showControls) {
       joystickController = JoystickController();
       add(joystickController);
-      add(JumpButton());
     }
   }
 

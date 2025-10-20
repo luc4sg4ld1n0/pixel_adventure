@@ -15,7 +15,7 @@ class Chicken extends Enemy {
   Chicken({super.position, super.size, this.offNeg = 0, this.offPos = 0});
 
   static const double stepTime = 0.05;
-  static const double runSpeed = 60;
+  static const double runSpeed = 100;
   static const double bounceHeight = 260.0;
   final Vector2 textureSize = Vector2(32, 34);
 

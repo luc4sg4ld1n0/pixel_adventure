@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:pixel_adventure/core/game/game_layers.dart';
 import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 import 'package:pixel_adventure/entities/player/player.dart';
 
@@ -18,7 +19,7 @@ class Checkpoint extends SpriteAnimationComponent
       ),
     );
 
-    priority = -1;
+    priority = GameLayers.world;
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache(
         'Items/Checkpoints/Checkpoint/Checkpoint (No Flag).png',

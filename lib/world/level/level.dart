@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:pixel_adventure/core/game/game_layers.dart';
 import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 import 'package:pixel_adventure/entities/player/player.dart';
 import 'package:pixel_adventure/world/environment/background_tile.dart';
@@ -59,6 +60,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
               size: Vector2(collision.width, collision.height),
               isPlatform: true,
             );
+            platform.priority = GameLayers.world;
             collisionBlocks.add(platform);
             add(platform);
             break;
@@ -67,6 +69,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
               position: Vector2(collision.x, collision.y),
               size: Vector2(collision.width, collision.height),
             );
+            block.priority = GameLayers.world;
             collisionBlocks.add(block);
             add(block);
             break;

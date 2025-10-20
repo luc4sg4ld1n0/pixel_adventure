@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flame/components.dart';
+import 'package:pixel_adventure/core/game/game_layers.dart';
 import 'package:pixel_adventure/core/game/screen_manager.dart';
 import 'package:pixel_adventure/core/components/button_component.dart';
 
@@ -46,7 +47,8 @@ class MenuScreen extends GameScreen {
       position: Vector2.zero(),
       anchor: Anchor.topLeft,
     );
-    background.priority = -100;
+    priority = GameLayers.background;
+    // background.priority = -100;
   }
 
   void _createTitle() {
@@ -56,7 +58,8 @@ class MenuScreen extends GameScreen {
       size: Vector2(400, 400),
       anchor: Anchor.center,
     );
-    title.priority = -10;
+    priority = GameLayers.backgroundElements;
+    // title.priority = -10;
   }
 
   void _createStartButton() {
@@ -68,6 +71,7 @@ class MenuScreen extends GameScreen {
         game.startGame();
       },
     );
-    startButton.priority = 0;
+    priority = GameLayers.ui;
+    // startButton.priority = 0;
   }
 }

@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:pixel_adventure/core/game/game_config.dart';
+import 'package:pixel_adventure/core/game/game_layers.dart';
 import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 
 class JumpButton extends SpriteComponent
     with TapCallbacks, HasGameReference<PixelAdventure> {
-  JumpButton();
+  final Vector2 gameAreaOffset;
+
+  JumpButton({required this.gameAreaOffset});
 
   static const double margin = 32;
   static const double buttonSize = 64;
@@ -13,11 +17,15 @@ class JumpButton extends SpriteComponent
   @override
   FutureOr<void> onLoad() {
     sprite = Sprite(game.images.fromCache('HUD/JumpButton.png'));
+
+    // Posiciona dentro da área do jogo (canto inferior direito)
     position = Vector2(
-      game.size.x - margin - buttonSize,
-      game.size.y - margin - buttonSize,
+      gameAreaOffset.x + GameConfig.gameSize.x - margin - buttonSize,
+      gameAreaOffset.y + GameConfig.gameSize.y - margin - buttonSize,
     );
-    priority = 10;
+
+    size = Vector2(buttonSize, buttonSize);
+    priority = GameLayers.controls;
     return super.onLoad();
   }
 
@@ -31,5 +39,11 @@ class JumpButton extends SpriteComponent
   void onTapUp(TapUpEvent event) {
     game.player.hasJumped = false;
     super.onTapUp(event);
+  }
+
+  @override
+  void onTapCancel(TapCancelEvent event) {
+    game.player.hasJumped = false;
+    super.onTapCancel(event);
   }
 }

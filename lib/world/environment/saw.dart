@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:pixel_adventure/core/game/game_layers.dart';
 import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 import 'package:pixel_adventure/core/utils/constants.dart';
 
@@ -27,7 +28,7 @@ class Saw extends SpriteAnimationComponent
 
   @override
   FutureOr<void> onLoad() {
-    priority = -1;
+    priority = GameLayers.backgroundElements;
     add(CircleHitbox());
 
     if (isVertical) {

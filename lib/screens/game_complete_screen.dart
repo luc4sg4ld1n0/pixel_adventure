@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flame/components.dart';
+import 'package:pixel_adventure/core/game/game_layers.dart';
 import 'package:pixel_adventure/core/game/screen_manager.dart';
 import 'package:pixel_adventure/core/components/button_component.dart';
 
@@ -53,7 +54,8 @@ class GameCompleteScreen extends GameScreen {
       position: Vector2.zero(),
       anchor: Anchor.topLeft,
     );
-    background.priority = -100;
+    priority = GameLayers.background;
+    // background.priority = -100;
   }
 
   void _createCongratulations() {
@@ -63,7 +65,8 @@ class GameCompleteScreen extends GameScreen {
       size: Vector2(300, 300),
       anchor: Anchor.center,
     );
-    congratulations.priority = -10;
+    priority = GameLayers.backgroundElements;
+    // congratulations.priority = -10;
   }
 
   void _createTrophy() {
@@ -73,7 +76,8 @@ class GameCompleteScreen extends GameScreen {
       size: Vector2(100, 100),
       anchor: Anchor.center,
     );
-    trophy.priority = -10;
+    priority = GameLayers.backgroundElements;
+    // trophy.priority = -10;
   }
 
   void _createMenuButton() {
@@ -85,6 +89,7 @@ class GameCompleteScreen extends GameScreen {
         game.goToMenu();
       },
     );
-    menuButton.priority = 0;
+    priority = GameLayers.ui;
+    // menuButton.priority = 0;
   }
 }
