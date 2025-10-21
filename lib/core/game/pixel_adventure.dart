@@ -4,6 +4,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pixel_adventure/core/game/game_config.dart';
+import 'package:pixel_adventure/core/game/game_layers.dart';
 import 'package:pixel_adventure/core/game/game_state.dart';
 import 'package:pixel_adventure/entities/player/player.dart';
 import 'package:pixel_adventure/entities/collectibles/checkpoint.dart';
@@ -128,7 +129,7 @@ class PixelAdventure extends FlameGame
       height: GameConfig.cameraHeight,
     );
     cam.viewfinder.anchor = Anchor.topLeft;
-    cam.priority = 0;
+    cam.priority = GameLayers.world;
 
     addAll([cam, world]);
 
