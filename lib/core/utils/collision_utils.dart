@@ -3,7 +3,6 @@ import 'package:pixel_adventure/world/environment/collision_block.dart';
 
 bool checkCollision(Player player, CollisionBlock block) {
   // elementos básicos para o cálculo de colisão
-
   final hitbox = player.hitbox;
   final playerX = player.position.x + hitbox.offsetX;
   final playerY = player.position.y + hitbox.offsetY;

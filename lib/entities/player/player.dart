@@ -23,6 +23,12 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
   final Vector2 startingPosition = Vector2.zero();
   final Vector2 velocity = Vector2.zero();
 
+  // Variáveis separadas para cada tipo de controle
+  double _keyboardHorizontalMovement = 0;
+  double _touchHorizontalMovement = 0;
+  bool _keyboardJump = false;
+  bool _touchJump = false;
+
   double horizontalMovement = 0;
   bool isOnGround = false;
   bool hasJumped = false;
@@ -77,7 +83,14 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    horizontalMovement = 0;
+    _updateKeyboardInput(keysPressed);
+    return true;
+  }
+
+  void _updateKeyboardInput(Set<LogicalKeyboardKey> keysPressed) {
+    _keyboardHorizontalMovement = 0;
+    _keyboardJump = false;
+
     final isLeftKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyA) ||
         keysPressed.contains(LogicalKeyboardKey.arrowLeft);
@@ -85,15 +98,19 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
         keysPressed.contains(LogicalKeyboardKey.keyD) ||
         keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
-    horizontalMovement += isLeftKeyPressed ? -1 : 0;
-    horizontalMovement += isRightKeyPressed ? 1 : 0;
+    _keyboardHorizontalMovement += isLeftKeyPressed ? -1 : 0;
+    _keyboardHorizontalMovement += isRightKeyPressed ? 1 : 0;
 
-    hasJumped =
+    _keyboardJump =
         keysPressed.contains(LogicalKeyboardKey.space) ||
         keysPressed.contains(LogicalKeyboardKey.arrowUp) ||
         keysPressed.contains(LogicalKeyboardKey.keyW);
+  }
 
-    return super.onKeyEvent(event, keysPressed);
+  // Método para o touch controlar o movimento
+  void updateTouchInput(double horizontalMovement, bool jump) {
+    _touchHorizontalMovement = horizontalMovement;
+    _touchJump = jump;
   }
 
   @override
@@ -141,6 +158,16 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
   }
 
   void _updatePlayerMovement(double dt) {
+    // Combina ambos os tipos de controles (teclado tem prioridade)
+    if (_keyboardHorizontalMovement != 0) {
+      horizontalMovement = _keyboardHorizontalMovement;
+    } else {
+      horizontalMovement = _touchHorizontalMovement;
+    }
+
+    // Jump funciona de ambas as fontes
+    hasJumped = _keyboardJump || _touchJump;
+
     if (hasJumped && isOnGround) _playerJump(dt);
 
     if (velocity.y > GameConstants.gravity) isOnGround = false;

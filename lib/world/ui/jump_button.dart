@@ -8,6 +8,8 @@ import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 class JumpButton extends SpriteComponent
     with TapCallbacks, HasGameReference<PixelAdventure> {
   final Vector2 gameAreaOffset;
+  bool _isPressed = false;
+  bool get isPressed => _isPressed;
 
   JumpButton({required this.gameAreaOffset});
 
@@ -31,19 +33,19 @@ class JumpButton extends SpriteComponent
 
   @override
   void onTapDown(TapDownEvent event) {
-    game.player.hasJumped = true;
+    _isPressed = true;
     super.onTapDown(event);
   }
 
   @override
   void onTapUp(TapUpEvent event) {
-    game.player.hasJumped = false;
+    _isPressed = false;
     super.onTapUp(event);
   }
 
   @override
   void onTapCancel(TapCancelEvent event) {
-    game.player.hasJumped = false;
+    _isPressed = false;
     super.onTapCancel(event);
   }
 }

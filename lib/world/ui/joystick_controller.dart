@@ -1,60 +1,4 @@
-// import 'dart:async';
-// import 'package:flame/components.dart';
-// import 'package:flutter/painting.dart';
-// import 'package:pixel_adventure/core/game/pixel_adventure.dart';
-
-// class JoystickController extends Component
-//     with HasGameReference<PixelAdventure> {
-//   late JoystickComponent joystick;
-
-//   @override
-//   FutureOr<void> onLoad() {
-//     _addJoystick();
-//     return super.onLoad();
-//   }
-
-//   void _addJoystick() {
-//     joystick = JoystickComponent(
-//       priority: 10,
-//       knob: SpriteComponent(
-//         sprite: Sprite(game.images.fromCache('HUD/Knob.png')),
-//       ),
-//       background: SpriteComponent(
-//         sprite: Sprite(game.images.fromCache('HUD/Joystick.png')),
-//       ),
-//       margin: const EdgeInsets.only(left: 32, bottom: 32),
-//     );
-
-//     game.add(joystick);
-//   }
-
-//   void updateJoystick() {
-//     switch (joystick.direction) {
-//       case JoystickDirection.left:
-//       case JoystickDirection.upLeft:
-//       case JoystickDirection.downLeft:
-//         game.player.horizontalMovement = -1;
-//         break;
-//       case JoystickDirection.right:
-//       case JoystickDirection.upRight:
-//       case JoystickDirection.downRight:
-//         game.player.horizontalMovement = 1;
-//         break;
-//       default:
-//         game.player.horizontalMovement = 0;
-//         break;
-//     }
-//   }
-
-//   @override
-//   void onRemove() {
-//     joystick.removeFromParent();
-//     super.onRemove();
-//   }
-// }
-
 import 'dart:async';
-
 import 'package:flame/components.dart';
 import 'package:flutter/painting.dart';
 import 'package:pixel_adventure/core/game/game_config.dart';
@@ -86,8 +30,8 @@ class JoystickController extends Component
         sprite: Sprite(game.images.fromCache('HUD/Joystick.png')),
       ),
       margin: EdgeInsets.only(
-        left: gameAreaOffset.x + 32, // Dentro da área do jogo
-        bottom: gameAreaOffset.y + 32, // Dentro da área do jogo
+        left: gameAreaOffset.x + 32,
+        bottom: gameAreaOffset.y + 32,
       ),
     );
 
@@ -109,21 +53,28 @@ class JoystickController extends Component
   }
 
   void updateJoystick() {
+    double touchHorizontalMovement = 0;
+    bool touchJump = jumpButton.isPressed;
+
+    // Pega direção do joystick
     switch (joystick.direction) {
       case JoystickDirection.left:
       case JoystickDirection.upLeft:
       case JoystickDirection.downLeft:
-        game.player.horizontalMovement = -1;
+        touchHorizontalMovement = -1;
         break;
       case JoystickDirection.right:
       case JoystickDirection.upRight:
       case JoystickDirection.downRight:
-        game.player.horizontalMovement = 1;
+        touchHorizontalMovement = 1;
         break;
       default:
-        game.player.horizontalMovement = 0;
+        touchHorizontalMovement = 0;
         break;
     }
+
+    // Envia os dados de touch para o player
+    game.player.updateTouchInput(touchHorizontalMovement, touchJump);
   }
 
   @override

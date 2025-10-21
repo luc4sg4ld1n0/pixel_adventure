@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 
 class GameConfig {
   // mostrar ou não controles da telatouch
-  static const bool showControls = false;
+  static const bool showControls = true;
   // ativar ou não sons
   static const bool playSounds = true;
   // volume padrão dos sons

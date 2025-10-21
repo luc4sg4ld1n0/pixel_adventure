@@ -128,6 +128,7 @@ class PixelAdventure extends FlameGame
       height: GameConfig.cameraHeight,
     );
     cam.viewfinder.anchor = Anchor.topLeft;
+    cam.priority = 0;
 
     addAll([cam, world]);
 

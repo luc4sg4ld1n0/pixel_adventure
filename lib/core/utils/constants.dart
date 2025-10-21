@@ -1,5 +1,4 @@
 // valores constantes usados no jogo
-
 class GameConstants {
   static const double gravity = 9.8;
   static const double jumpForce = 280;

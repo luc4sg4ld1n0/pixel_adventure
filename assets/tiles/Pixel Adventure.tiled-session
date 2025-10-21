@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Level-04.tmx",
+    "activeFile": "Level-03.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -117,8 +117,8 @@
     "map.width": 48,
     "openFiles": [
         "Level-01.tmx",
-        "Level-04.tmx",
-        "Pixel Adventure.tsx"
+        "Level-02.tmx",
+        "Level-03.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "float",
