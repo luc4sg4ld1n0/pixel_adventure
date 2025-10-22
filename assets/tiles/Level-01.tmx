@@ -102,8 +102,6 @@
     <property name="offPos" type="float" value="0"/>
    </properties>
   </object>
-  <object id="37" name="Strawberry" type="Fruit" x="80" y="288" width="32" height="32"/>
-  <object id="38" name="Strawberry" type="Fruit" x="128" y="288" width="32" height="32"/>
   <object id="39" name="Strawberry" type="Fruit" x="272" y="288" width="32" height="32"/>
   <object id="40" name="Strawberry" type="Fruit" x="352" y="288" width="32" height="32"/>
   <object id="41" name="Strawberry" type="Fruit" x="496" y="288" width="32" height="32"/>

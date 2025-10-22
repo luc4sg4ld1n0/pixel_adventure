@@ -2,12 +2,11 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:pixel_adventure/core/game/game_layers.dart';
 import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 import 'package:pixel_adventure/entities/player/player.dart';
 
 class Fruit extends SpriteAnimationComponent
-    with CollisionCallbacks, HasGameReference<PixelAdventure> {
+    with HasGameReference<PixelAdventure>, CollisionCallbacks {
   final String fruit;
   Fruit({this.fruit = 'apple', super.position, super.size});
 
@@ -22,7 +21,7 @@ class Fruit extends SpriteAnimationComponent
 
   @override
   FutureOr<void> onLoad() {
-    priority = GameLayers.world;
+    priority = -1;
 
     add(
       RectangleHitbox(
@@ -49,6 +48,10 @@ class Fruit extends SpriteAnimationComponent
       if (game.playSounds) {
         FlameAudio.play('collect_fruit.wav', volume: game.soundVolume);
       }
+
+      // NOTIFICA o contador de frutas
+      game.fruitCounter.collectFruit();
+
       animation = SpriteAnimation.fromFrameData(
         game.images.fromCache('Items/Fruits/Collected.png'),
         SpriteAnimationData.sequenced(
