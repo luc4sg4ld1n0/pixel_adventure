@@ -3,6 +3,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
+import 'package:pixel_adventure/core/game/game_state.dart';
 import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 import 'package:pixel_adventure/core/utils/constants.dart';
 import 'package:pixel_adventure/core/utils/collision_utils.dart';
@@ -239,6 +240,9 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
   }
 
   void _respawn() async {
+    // Previne múltiplas chamadas de respawn
+    if (gotHit || reachedCheckpoint) return;
+
     if (game.playSounds) {
       FlameAudio.play('hit.wav', volume: game.soundVolume);
     }
@@ -249,20 +253,27 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
     await animationTicker?.completed;
     animationTicker?.reset();
 
-    scale.x = 1;
-    position = startingPosition - Vector2.all(32);
-    current = MainPlayerState.appearing;
+    // chama o método de morte do game
+    game.playerDied();
 
-    await animationTicker?.completed;
-    animationTicker?.reset();
+    // Só faz a animação de respawn se não for game over
+    if (!GameStateManager.isGameOver()) {
+      scale.x = 1;
+      position = startingPosition - Vector2.all(32);
+      current = MainPlayerState.appearing;
 
-    velocity.setZero();
-    position.setFrom(startingPosition);
+      await animationTicker?.completed;
+      animationTicker?.reset();
 
-    _updatePlayerState();
+      velocity.setZero();
+      position.setFrom(startingPosition);
 
-    await Future.delayed(const Duration(milliseconds: 400));
-    gotHit = false;
+      _updatePlayerState();
+
+      await Future.delayed(const Duration(milliseconds: 400));
+      gotHit = false;
+    }
+    // Se for game over, o player simplesmente desaparece
   }
 
   void _reachedCheckpoint() async {

@@ -4,31 +4,28 @@ import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 import 'package:pixel_adventure/core/game/game_config.dart';
 import 'package:pixel_adventure/core/game/game_layers.dart';
+import 'package:pixel_adventure/core/game/game_state.dart';
 import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 
-class FruitCounter extends Component with HasGameReference<PixelAdventure> {
-  late TextComponent _fruitEmoji;
+class LifeCounter extends Component with HasGameReference<PixelAdventure> {
+  late TextComponent _lifeEmoji;
   late TextComponent _xSymbol;
   late TextComponent _counterText;
-  int _fruitCount = 0;
   Vector2 _originalScale = Vector2(1, 1);
-  Timer? _animationTimer;
-  bool _isLoaded = false;
 
   @override
   FutureOr<void> onLoad() {
-    _createFruitEmoji();
+    _createLifeEmoji();
     _createXSymbol();
     _createCounterText();
-    _updateCounterText();
+    updateLives();
 
-    _isLoaded = true;
     return super.onLoad();
   }
 
-  void _createFruitEmoji() {
-    _fruitEmoji = TextComponent(
-      text: '🍓',
+  void _createLifeEmoji() {
+    _lifeEmoji = TextComponent(
+      text: '❤️',
       textRenderer: TextPaint(
         style: const TextStyle(
           fontSize: 24,
@@ -43,15 +40,15 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
         ),
       ),
       position: Vector2(
-        GameConfig.cameraWidth / 2 - 105,
+        GameConfig.cameraWidth / 2 + 45,
         GameConfig.cameraHeight - 35,
       ),
       anchor: Anchor.center,
       priority: GameLayers.ui,
     );
 
-    _originalScale = _fruitEmoji.scale.clone();
-    add(_fruitEmoji);
+    _originalScale = _lifeEmoji.scale.clone();
+    add(_lifeEmoji);
   }
 
   void _createXSymbol() {
@@ -72,7 +69,7 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
         ),
       ),
       position: Vector2(
-        GameConfig.cameraWidth / 2 - 75,
+        GameConfig.cameraWidth / 2 + 75,
         GameConfig.cameraHeight - 35,
       ),
       anchor: Anchor.center,
@@ -84,7 +81,7 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
 
   void _createCounterText() {
     _counterText = TextComponent(
-      text: '0',
+      text: '3',
       textRenderer: TextPaint(
         style: const TextStyle(
           fontSize: 22,
@@ -101,7 +98,7 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
         ),
       ),
       position: Vector2(
-        GameConfig.cameraWidth / 2 - 45,
+        GameConfig.cameraWidth / 2 + 105,
         GameConfig.cameraHeight - 35,
       ),
       anchor: Anchor.center,
@@ -111,73 +108,30 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
     add(_counterText);
   }
 
-  void _updateCounterText() {
-    if (_isLoaded) {
-      _counterText.text = '$_fruitCount';
+  void updateLives() {
+    _counterText.text = '${GameStateManager.currentLives}';
+    _animateUpdate();
+  }
+
+  void _animateUpdate() {
+    // Reseta para escala original antes de animar
+    _lifeEmoji.scale = _originalScale.clone();
+
+    // Animação mais suave sem acumular escala
+    final targetScale = _originalScale * 0.7;
+    _lifeEmoji.scale = targetScale;
+
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (_lifeEmoji.isMounted) {
+        _lifeEmoji.scale = _originalScale.clone();
+      }
+    });
+  }
+
+  // Método para garantir que a escala seja resetada quando necessário
+  void resetScale() {
+    if (_lifeEmoji.isMounted) {
+      _lifeEmoji.scale = _originalScale.clone();
     }
   }
-
-  void collectFruit() {
-    if (!_isLoaded) return;
-
-    _fruitCount++;
-    _updateCounterText();
-    _animateCollection();
-  }
-
-  void _animateCollection() {
-    if (!_isLoaded) return;
-
-    // Para qualquer animação em andamento
-    _stopAnimation();
-
-    // Reseta para tamanho original antes de animar
-    _fruitEmoji.scale = _originalScale.clone();
-
-    // Animação de escala
-    _fruitEmoji.scale = _originalScale * 1.3;
-
-    // Configura o timer para resetar o tamanho após a animação
-    _animationTimer = Timer(
-      0.15,
-      onTick: () {
-        if (_fruitEmoji.isMounted) {
-          _fruitEmoji.scale = _originalScale.clone();
-          _animationTimer = null;
-        }
-      },
-    );
-  }
-
-  void _stopAnimation() {
-    if (_animationTimer != null) {
-      _animationTimer = null;
-    }
-    // Reseta a escala imediatamente
-    if (_isLoaded && _fruitEmoji.isMounted) {
-      _fruitEmoji.scale = _originalScale.clone();
-    }
-  }
-
-  @override
-  void update(double dt) {
-    _animationTimer?.update(dt);
-    super.update(dt);
-  }
-
-  @override
-  void onRemove() {
-    _stopAnimation();
-    super.onRemove();
-  }
-
-  void resetCounter() {
-    if (!_isLoaded) return;
-
-    _fruitCount = 0;
-    _updateCounterText();
-    _stopAnimation();
-  }
-
-  int get fruitCount => _fruitCount;
 }

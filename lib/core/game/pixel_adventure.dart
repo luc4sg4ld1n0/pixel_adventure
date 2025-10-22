@@ -8,12 +8,14 @@ import 'package:pixel_adventure/core/game/game_layers.dart';
 import 'package:pixel_adventure/core/game/game_state.dart';
 import 'package:pixel_adventure/entities/player/player.dart';
 import 'package:pixel_adventure/entities/collectibles/checkpoint.dart';
+import 'package:pixel_adventure/screens/game_over_screen.dart';
 import 'package:pixel_adventure/screens/menu_screen.dart';
 import 'package:pixel_adventure/screens/game_complete_screen.dart';
 import 'package:pixel_adventure/world/level/level.dart';
 import 'package:pixel_adventure/world/ui/jump_button.dart';
 import 'package:pixel_adventure/world/ui/joystick_controller.dart';
 import 'package:pixel_adventure/world/ui/fruit_counter.dart';
+import 'package:pixel_adventure/world/ui/life_counter.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -28,6 +30,7 @@ class PixelAdventure extends FlameGame
   Player player = Player();
   JoystickController? joystickController;
   late FruitCounter fruitCounter;
+  late LifeCounter lifeCounter;
 
   bool showControls = GameConfig.showControls;
   bool playSounds = GameConfig.playSounds;
@@ -35,9 +38,11 @@ class PixelAdventure extends FlameGame
 
   int currentLevelIndex = 0;
   GameState _currentState = GameState.menu;
+  bool _isProcessingDeath = false;
 
   late MenuScreen menuScreen;
   late GameCompleteScreen gameCompleteScreen;
+  late GameOverScreen gameOverScreen;
 
   @override
   FutureOr<void> onLoad() async {
@@ -46,13 +51,16 @@ class PixelAdventure extends FlameGame
     // Inicializa as telas
     menuScreen = MenuScreen();
     gameCompleteScreen = GameCompleteScreen();
+    gameOverScreen = GameOverScreen();
 
     // Adiciona as telas ao jogo
     await add(menuScreen);
     await add(gameCompleteScreen);
+    await add(gameOverScreen);
 
-    // Inicializa o contador de frutas (mas não adiciona ainda)
+    // Inicializa os contadores (mas não adiciona ainda)
     fruitCounter = FruitCounter();
+    lifeCounter = LifeCounter();
 
     // Começa com o menu ativo
     _setState(GameState.menu);
@@ -70,8 +78,11 @@ class PixelAdventure extends FlameGame
         break;
       case GameState.gameComplete:
         gameCompleteScreen.isActive = false;
-        // RESETA o contador quando sai da tela de jogo completo
-        _resetFruitCounter();
+        _resetFruitCounter(); // Reseta frutas ao sair da tela de completo
+        break;
+      case GameState.gameOver:
+        gameOverScreen.isActive = false;
+        _resetFruitCounter(); // Reseta frutas ao sair da tela de game over
         break;
     }
 
@@ -81,6 +92,7 @@ class PixelAdventure extends FlameGame
     switch (newState) {
       case GameState.menu:
         menuScreen.isActive = true;
+        _resetFruitCounter(); // reseta o contador de frutas ao voltar ao menu
         break;
       case GameState.playing:
         _loadLevel();
@@ -88,20 +100,56 @@ class PixelAdventure extends FlameGame
       case GameState.gameComplete:
         gameCompleteScreen.isActive = true;
         break;
+      case GameState.gameOver:
+        gameOverScreen.isActive = true;
+        break;
     }
   }
 
   void startGame() {
     currentLevelIndex = 0;
+    GameStateManager.resetLives();
+    _isProcessingDeath = false;
     _setState(GameState.playing);
   }
 
   void goToMenu() {
+    _isProcessingDeath = false;
     _setState(GameState.menu);
   }
 
   void completeGame() {
     _setState(GameState.gameComplete);
+  }
+
+  void goToGameOver() {
+    _isProcessingDeath = false;
+    _setState(GameState.gameOver);
+  }
+
+  void restartGame() {
+    GameStateManager.resetLives();
+    _isProcessingDeath = false;
+    _setState(GameState.playing);
+  }
+
+  void playerDied() {
+    if (_isProcessingDeath) return;
+
+    _isProcessingDeath = true;
+
+    GameStateManager.loseLife();
+    lifeCounter.updateLives();
+
+    if (GameStateManager.isGameOver()) {
+      // Vai direto para game over sem respawn
+      Future.delayed(const Duration(milliseconds: 500), () {
+        goToGameOver();
+      });
+    } else {
+      // Continua no jogo, o player já está fazendo a animação de respawn
+      _isProcessingDeath = false;
+    }
   }
 
   @override
@@ -115,6 +163,8 @@ class PixelAdventure extends FlameGame
   void loadNextLevel() {
     if (currentLevelIndex < GameConfig.levelNames.length - 1) {
       currentLevelIndex++;
+      GameStateManager.resetLives();
+      _isProcessingDeath = false;
       _loadLevel();
     } else {
       completeGame();
@@ -139,24 +189,33 @@ class PixelAdventure extends FlameGame
 
     addAll([cam!, world]);
 
-    // Adiciona o contador de frutas ao viewport (SEMPRE)
+    // Adiciona os contadores ao viewport
     if (!fruitCounter.isMounted) {
       cam!.viewport.add(fruitCounter);
     } else {
-      // Se já está montado, garante que está no viewport correto
       if (fruitCounter.parent != cam!.viewport) {
         fruitCounter.removeFromParent();
         cam!.viewport.add(fruitCounter);
       }
     }
 
+    if (!lifeCounter.isMounted) {
+      cam!.viewport.add(lifeCounter);
+    } else {
+      if (lifeCounter.parent != cam!.viewport) {
+        lifeCounter.removeFromParent();
+        cam!.viewport.add(lifeCounter);
+      }
+    }
+
+    lifeCounter.resetScale();
+
     if (showControls) {
       joystickController = JoystickController();
       add(joystickController!);
     }
 
-    // NÃO reseta o contador aqui - mantém entre fases
-    // fruitCounter.resetCounter();
+    lifeCounter.updateLives();
   }
 
   void _cleanCurrentLevel() {
@@ -174,7 +233,6 @@ class PixelAdventure extends FlameGame
       }
     }
 
-    // Remove APENAS controles do viewport, NÃO o FruitCounter
     if (cam != null && cam!.viewport.children.isNotEmpty) {
       final viewportComponents = cam!.viewport.children
           .where(
@@ -192,12 +250,10 @@ class PixelAdventure extends FlameGame
       removeAll(componentsToRemove);
     }
 
-    // Reseta o player
     player = Player();
     joystickController = null;
   }
 
-  // Método para resetar o contador quando o jogo é completado
   void _resetFruitCounter() {
     fruitCounter.resetCounter();
   }

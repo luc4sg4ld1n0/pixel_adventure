@@ -1,3 +1,4 @@
+// Camadas do jogo, para organizar a ordem de renderização dos elementos
 class GameLayers {
   static const int background = -100;
   static const int backgroundElements = -50;
