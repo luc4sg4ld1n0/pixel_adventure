@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="101">
+ <properties>
+  <property name="isActive" type="bool" value="false"/>
+ </properties>
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="48" height="27">
   <properties>
@@ -100,27 +103,9 @@
     <property name="offPos" type="float" value="6"/>
    </properties>
   </object>
-  <object id="75" name="Strawberry" type="Fruit" x="0" y="96" width="32" height="32"/>
-  <object id="76" name="Strawberry" type="Fruit" x="32" y="128" width="32" height="32"/>
-  <object id="77" name="Strawberry" type="Fruit" x="704" y="128" width="32" height="32"/>
-  <object id="78" name="Strawberry" type="Fruit" x="736" y="96" width="32" height="32"/>
-  <object id="79" name="Strawberry" type="Fruit" x="704" y="288" width="32" height="32"/>
-  <object id="80" name="Strawberry" type="Fruit" x="736" y="256" width="32" height="32"/>
-  <object id="81" name="Strawberry" type="Fruit" x="416" y="176" width="32" height="32"/>
-  <object id="82" name="Strawberry" type="Fruit" x="448" y="208" width="32" height="32"/>
-  <object id="83" name="Strawberry" type="Fruit" x="288" y="208" width="32" height="32"/>
-  <object id="84" name="Strawberry" type="Fruit" x="320" y="176" width="32" height="32"/>
-  <object id="85" name="Strawberry" type="Fruit" x="0" y="256" width="32" height="32"/>
-  <object id="86" name="Strawberry" type="Fruit" x="32" y="288" width="32" height="32"/>
-  <object id="87" name="Strawberry" type="Fruit" x="400" y="32" width="32" height="32"/>
-  <object id="88" name="Strawberry" type="Fruit" x="336" y="32" width="32" height="32"/>
-  <object id="89" name="Strawberry" type="Fruit" x="304" y="48" width="32" height="32"/>
-  <object id="90" name="Strawberry" type="Fruit" x="432" y="48" width="32" height="32"/>
-  <object id="95" name="Strawberry" type="Fruit" x="32" y="96" width="32" height="32"/>
-  <object id="96" name="Strawberry" type="Fruit" x="704" y="96" width="32" height="32"/>
-  <object id="97" name="Strawberry" type="Fruit" x="448" y="176" width="32" height="32"/>
-  <object id="98" name="Strawberry" type="Fruit" x="288" y="176" width="32" height="32"/>
-  <object id="99" name="Strawberry" type="Fruit" x="704" y="256" width="32" height="32"/>
-  <object id="100" name="Strawberry" type="Fruit" x="32" y="256" width="32" height="32"/>
+  <object id="76" name="Strawberry" type="Fruit" x="320" y="96" width="32" height="32"/>
+  <object id="81" name="Strawberry" type="Fruit" x="416" y="96" width="32" height="32"/>
+  <object id="85" name="Strawberry" type="Fruit" x="0" y="176" width="32" height="32"/>
+  <object id="96" name="Strawberry" type="Fruit" x="736" y="256" width="32" height="32"/>
  </objectgroup>
 </map>

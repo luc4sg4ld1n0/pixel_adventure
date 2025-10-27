@@ -121,7 +121,7 @@
         "Level-03.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
-    "property.type": "float",
+    "property.type": "bool",
     "recentFiles": [
         "Level-03.tmx",
         "Level-02.tmx",

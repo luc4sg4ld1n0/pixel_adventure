@@ -45,6 +45,7 @@ class LevelLoader {
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
+
             world.add(checkpoint);
             break;
           case 'Chicken':

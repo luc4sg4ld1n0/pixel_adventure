@@ -58,7 +58,7 @@ class PixelAdventure extends FlameGame
     await add(gameCompleteScreen);
     await add(gameOverScreen);
 
-    // Inicializa os contadores (mas não adiciona ainda)
+    // Inicializa os contadores
     fruitCounter = FruitCounter();
     lifeCounter = LifeCounter();
 
@@ -78,11 +78,11 @@ class PixelAdventure extends FlameGame
         break;
       case GameState.gameComplete:
         gameCompleteScreen.isActive = false;
-        _resetFruitCounter(); // Reseta frutas ao sair da tela de completo
+        _resetFruitCounter();
         break;
       case GameState.gameOver:
         gameOverScreen.isActive = false;
-        _resetFruitCounter(); // Reseta frutas ao sair da tela de game over
+        _resetFruitCounter();
         break;
     }
 
@@ -92,7 +92,7 @@ class PixelAdventure extends FlameGame
     switch (newState) {
       case GameState.menu:
         menuScreen.isActive = true;
-        _resetFruitCounter(); // reseta o contador de frutas ao voltar ao menu
+        _resetFruitCounter();
         break;
       case GameState.playing:
         _loadLevel();
@@ -142,13 +142,13 @@ class PixelAdventure extends FlameGame
     lifeCounter.updateLives();
 
     if (GameStateManager.isGameOver()) {
-      // Vai direto para game over sem respawn
       Future.delayed(const Duration(milliseconds: 500), () {
         goToGameOver();
       });
     } else {
-      // Continua no jogo, o player já está fazendo a animação de respawn
-      _isProcessingDeath = false;
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _isProcessingDeath = false;
+      });
     }
   }
 
@@ -165,6 +165,7 @@ class PixelAdventure extends FlameGame
       currentLevelIndex++;
       GameStateManager.resetLives();
       _isProcessingDeath = false;
+      _resetFruitCounter();
       _loadLevel();
     } else {
       completeGame();

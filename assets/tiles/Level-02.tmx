@@ -46,7 +46,11 @@
  </objectgroup>
  <objectgroup id="3" name="Spawnpoints">
   <object id="5" name="Player" type="Player" x="16" y="0" width="32" height="32"/>
-  <object id="6" name="Checkpoint" type="Checkpoint" x="0" y="240" width="64" height="64"/>
+  <object id="6" name="Checkpoint" type="Checkpoint" x="0" y="240" width="64" height="64">
+   <properties>
+    <property name="isActive" type="bool" value="false"/>
+   </properties>
+  </object>
   <object id="58" name="Chicken" type="Chicken" x="160" y="96" width="32" height="32">
    <properties>
     <property name="isVertical" type="bool" value="false"/>
@@ -75,76 +79,10 @@
     <property name="offPos" type="float" value="11"/>
    </properties>
   </object>
-  <object id="66" name="Strawberry" type="Fruit" x="144" y="0" width="32" height="32"/>
-  <object id="67" name="Strawberry" type="Fruit" x="208" y="0" width="32" height="32"/>
-  <object id="68" name="Strawberry" type="Fruit" x="272" y="0" width="32" height="32"/>
-  <object id="69" name="Strawberry" type="Fruit" x="336" y="0" width="32" height="32"/>
-  <object id="70" name="Strawberry" type="Fruit" x="400" y="0" width="32" height="32"/>
-  <object id="71" name="Strawberry" type="Fruit" x="464" y="0" width="32" height="32"/>
-  <object id="72" name="Strawberry" type="Fruit" x="528" y="0" width="32" height="32"/>
-  <object id="73" name="Strawberry" type="Fruit" x="592" y="0" width="32" height="32"/>
-  <object id="74" name="Strawberry" type="Fruit" x="656" y="0" width="32" height="32"/>
-  <object id="75" name="Strawberry" type="Fruit" x="736" y="32" width="32" height="32"/>
-  <object id="76" name="Strawberry" type="Fruit" x="704" y="32" width="32" height="32"/>
-  <object id="77" name="Strawberry" type="Fruit" x="592" y="48" width="32" height="32"/>
-  <object id="78" name="Strawberry" type="Fruit" x="528" y="48" width="32" height="32"/>
-  <object id="79" name="Strawberry" type="Fruit" x="464" y="48" width="32" height="32"/>
+  <object id="74" name="Strawberry" type="Fruit" x="720" y="48" width="32" height="32"/>
   <object id="80" name="Strawberry" type="Fruit" x="400" y="48" width="32" height="32"/>
-  <object id="81" name="Strawberry" type="Fruit" x="336" y="48" width="32" height="32"/>
-  <object id="82" name="Strawberry" type="Fruit" x="272" y="48" width="32" height="32"/>
-  <object id="83" name="Strawberry" type="Fruit" x="208" y="48" width="32" height="32"/>
-  <object id="84" name="Strawberry" type="Fruit" x="144" y="48" width="32" height="32"/>
-  <object id="85" name="Strawberry" type="Fruit" x="80" y="48" width="32" height="32"/>
-  <object id="86" name="Strawberry" type="Fruit" x="0" y="112" width="32" height="32"/>
-  <object id="87" name="Strawberry" type="Fruit" x="32" y="112" width="32" height="32"/>
-  <object id="88" name="Strawberry" type="Fruit" x="80" y="144" width="32" height="32"/>
-  <object id="89" name="Strawberry" type="Fruit" x="144" y="144" width="32" height="32"/>
-  <object id="90" name="Strawberry" type="Fruit" x="208" y="144" width="32" height="32"/>
-  <object id="91" name="Strawberry" type="Fruit" x="272" y="144" width="32" height="32"/>
-  <object id="92" name="Strawberry" type="Fruit" x="336" y="144" width="32" height="32"/>
-  <object id="93" name="Strawberry" type="Fruit" x="400" y="144" width="32" height="32"/>
-  <object id="94" name="Strawberry" type="Fruit" x="464" y="144" width="32" height="32"/>
-  <object id="95" name="Strawberry" type="Fruit" x="528" y="144" width="32" height="32"/>
-  <object id="96" name="Strawberry" type="Fruit" x="592" y="144" width="32" height="32"/>
-  <object id="97" name="Strawberry" type="Fruit" x="656" y="48" width="32" height="32"/>
-  <object id="98" name="Strawberry" type="Fruit" x="656" y="144" width="32" height="32"/>
-  <object id="99" name="Strawberry" type="Fruit" x="704" y="224" width="32" height="32"/>
-  <object id="100" name="Strawberry" type="Fruit" x="736" y="224" width="32" height="32"/>
-  <object id="101" name="Strawberry" type="Fruit" x="80" y="288" width="32" height="32"/>
-  <object id="102" name="Strawberry" type="Fruit" x="144" y="288" width="32" height="32"/>
-  <object id="103" name="Strawberry" type="Fruit" x="112" y="288" width="32" height="32"/>
-  <object id="104" name="Strawberry" type="Fruit" x="80" y="256" width="32" height="32"/>
-  <object id="105" name="Strawberry" type="Fruit" x="144" y="256" width="32" height="32"/>
-  <object id="106" name="Strawberry" type="Fruit" x="112" y="256" width="32" height="32"/>
-  <object id="107" name="Strawberry" type="Fruit" x="176" y="288" width="32" height="32"/>
-  <object id="108" name="Strawberry" type="Fruit" x="240" y="288" width="32" height="32"/>
-  <object id="109" name="Strawberry" type="Fruit" x="208" y="288" width="32" height="32"/>
-  <object id="110" name="Strawberry" type="Fruit" x="176" y="256" width="32" height="32"/>
-  <object id="111" name="Strawberry" type="Fruit" x="240" y="256" width="32" height="32"/>
-  <object id="112" name="Strawberry" type="Fruit" x="208" y="256" width="32" height="32"/>
-  <object id="113" name="Strawberry" type="Fruit" x="272" y="288" width="32" height="32"/>
-  <object id="114" name="Strawberry" type="Fruit" x="336" y="288" width="32" height="32"/>
-  <object id="115" name="Strawberry" type="Fruit" x="304" y="288" width="32" height="32"/>
-  <object id="116" name="Strawberry" type="Fruit" x="272" y="256" width="32" height="32"/>
-  <object id="117" name="Strawberry" type="Fruit" x="336" y="256" width="32" height="32"/>
-  <object id="118" name="Strawberry" type="Fruit" x="304" y="256" width="32" height="32"/>
-  <object id="119" name="Strawberry" type="Fruit" x="368" y="288" width="32" height="32"/>
-  <object id="120" name="Strawberry" type="Fruit" x="432" y="288" width="32" height="32"/>
-  <object id="121" name="Strawberry" type="Fruit" x="400" y="288" width="32" height="32"/>
-  <object id="122" name="Strawberry" type="Fruit" x="368" y="256" width="32" height="32"/>
-  <object id="123" name="Strawberry" type="Fruit" x="432" y="256" width="32" height="32"/>
-  <object id="124" name="Strawberry" type="Fruit" x="400" y="256" width="32" height="32"/>
-  <object id="125" name="Strawberry" type="Fruit" x="464" y="288" width="32" height="32"/>
-  <object id="126" name="Strawberry" type="Fruit" x="528" y="288" width="32" height="32"/>
-  <object id="127" name="Strawberry" type="Fruit" x="496" y="288" width="32" height="32"/>
-  <object id="128" name="Strawberry" type="Fruit" x="464" y="256" width="32" height="32"/>
-  <object id="129" name="Strawberry" type="Fruit" x="528" y="256" width="32" height="32"/>
-  <object id="130" name="Strawberry" type="Fruit" x="496" y="256" width="32" height="32"/>
-  <object id="131" name="Strawberry" type="Fruit" x="560" y="288" width="32" height="32"/>
-  <object id="132" name="Strawberry" type="Fruit" x="624" y="288" width="32" height="32"/>
-  <object id="133" name="Strawberry" type="Fruit" x="592" y="288" width="32" height="32"/>
-  <object id="134" name="Strawberry" type="Fruit" x="560" y="256" width="32" height="32"/>
-  <object id="135" name="Strawberry" type="Fruit" x="624" y="256" width="32" height="32"/>
-  <object id="136" name="Strawberry" type="Fruit" x="592" y="256" width="32" height="32"/>
+  <object id="92" name="Strawberry" type="Fruit" x="16" y="128" width="32" height="32"/>
+  <object id="93" name="Strawberry" type="Fruit" x="720" y="224" width="32" height="32"/>
+  <object id="98" name="Strawberry" type="Fruit" x="320" y="288" width="32" height="32"/>
  </objectgroup>
 </map>

@@ -8,7 +8,6 @@ import 'package:pixel_adventure/core/game/pixel_adventure.dart';
 import 'package:pixel_adventure/core/utils/constants.dart';
 import 'package:pixel_adventure/core/utils/collision_utils.dart';
 import 'package:pixel_adventure/entities/collectibles/fruit.dart';
-import 'package:pixel_adventure/entities/collectibles/checkpoint.dart';
 import 'package:pixel_adventure/entities/enemies/chicken.dart';
 import 'package:pixel_adventure/world/environment/collision_block.dart';
 import 'package:pixel_adventure/world/environment/saw.dart';
@@ -24,7 +23,6 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
   final Vector2 startingPosition = Vector2.zero();
   final Vector2 velocity = Vector2.zero();
 
-  // Variáveis separadas para cada tipo de controle
   double _keyboardHorizontalMovement = 0;
   double _touchHorizontalMovement = 0;
   bool _keyboardJump = false;
@@ -108,7 +106,6 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
         keysPressed.contains(LogicalKeyboardKey.keyW);
   }
 
-  // Método para o touch controlar o movimento
   void updateTouchInput(double horizontalMovement, bool jump) {
     _touchHorizontalMovement = horizontalMovement;
     _touchJump = jump;
@@ -123,7 +120,6 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
       if (other is Fruit) other.collidedWithPlayer();
       if (other is Saw) _respawn();
       if (other is Chicken) other.collidedWithPlayer();
-      if (other is Checkpoint && !reachedCheckpoint) _reachedCheckpoint();
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -159,14 +155,12 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
   }
 
   void _updatePlayerMovement(double dt) {
-    // Combina ambos os tipos de controles (teclado tem prioridade)
     if (_keyboardHorizontalMovement != 0) {
       horizontalMovement = _keyboardHorizontalMovement;
     } else {
       horizontalMovement = _touchHorizontalMovement;
     }
 
-    // Jump funciona de ambas as fontes
     hasJumped = _keyboardJump || _touchJump;
 
     if (hasJumped && isOnGround) _playerJump(dt);
@@ -240,7 +234,6 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
   }
 
   void _respawn() async {
-    // Previne múltiplas chamadas de respawn
     if (gotHit || reachedCheckpoint) return;
 
     if (game.playSounds) {
@@ -253,10 +246,8 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
     await animationTicker?.completed;
     animationTicker?.reset();
 
-    // chama o método de morte do game
     game.playerDied();
 
-    // Só faz a animação de respawn se não for game over
     if (!GameStateManager.isGameOver()) {
       scale.x = 1;
       position = startingPosition - Vector2.all(32);
@@ -273,10 +264,11 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
       await Future.delayed(const Duration(milliseconds: 400));
       gotHit = false;
     }
-    // Se for game over, o player simplesmente desaparece
   }
 
-  void _reachedCheckpoint() async {
+  Future<void> startCheckpointSequence() async {
+    if (reachedCheckpoint) return;
+
     reachedCheckpoint = true;
 
     if (game.playSounds) {
@@ -289,15 +281,10 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
       position = position + Vector2(32, -32);
     }
 
+    // Animação de desaparecimento
     current = MainPlayerState.disappearing;
     await animationTicker?.completed;
     animationTicker?.reset();
-
-    reachedCheckpoint = false;
-    position = Vector2.all(-640);
-
-    await Future.delayed(const Duration(seconds: 2));
-    game.loadNextLevel();
   }
 
   void collidedWithEnemy() {
