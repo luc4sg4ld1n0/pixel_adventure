@@ -10,6 +10,7 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
   late TextComponent _fruitEmoji;
   late TextComponent _xSymbol;
   late TextComponent _counterText;
+  late TextComponent _slashAndTotal;
   int _fruitCount = 0;
   Vector2 _originalScale = Vector2(1, 1);
   Timer? _animationTimer;
@@ -20,6 +21,7 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
     _createFruitEmoji();
     _createXSymbol();
     _createCounterText();
+    _createSlashAndTotal();
     _updateCounterText();
 
     _isLoaded = true;
@@ -43,7 +45,7 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
         ),
       ),
       position: Vector2(
-        GameConfig.cameraWidth / 2 - 105,
+        GameConfig.cameraWidth / 2 - 120,
         GameConfig.cameraHeight - 35,
       ),
       anchor: Anchor.center,
@@ -72,7 +74,7 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
         ),
       ),
       position: Vector2(
-        GameConfig.cameraWidth / 2 - 75,
+        GameConfig.cameraWidth / 2 - 90,
         GameConfig.cameraHeight - 35,
       ),
       anchor: Anchor.center,
@@ -101,7 +103,7 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
         ),
       ),
       position: Vector2(
-        GameConfig.cameraWidth / 2 - 45,
+        GameConfig.cameraWidth / 2 - 60,
         GameConfig.cameraHeight - 35,
       ),
       anchor: Anchor.center,
@@ -111,9 +113,134 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
     add(_counterText);
   }
 
+  void _createSlashAndTotal() {
+    _slashAndTotal = TextComponent(
+      text: '/5',
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          fontSize: 22,
+          color: Color(0xFFFFFFFF),
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Arial',
+          shadows: [
+            Shadow(
+              blurRadius: 3,
+              color: Color(0xFF000000),
+              offset: Offset(2, 2),
+            ),
+          ],
+        ),
+      ),
+      position: Vector2(
+        GameConfig.cameraWidth / 2 - 42,
+        GameConfig.cameraHeight - 35,
+      ),
+      anchor: Anchor.center,
+      priority: GameLayers.ui,
+    );
+
+    add(_slashAndTotal);
+  }
+
   void _updateCounterText() {
     if (_isLoaded) {
       _counterText.text = '$_fruitCount';
+
+      if (_fruitCount >= 5) {
+        _counterText.textRenderer = TextPaint(
+          style: const TextStyle(
+            fontSize: 22,
+            color: Color(0xFF00FF00),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Arial',
+            shadows: [
+              Shadow(
+                blurRadius: 3,
+                color: Color(0xFF000000),
+                offset: Offset(2, 2),
+              ),
+            ],
+          ),
+        );
+
+        _slashAndTotal.textRenderer = TextPaint(
+          style: const TextStyle(
+            fontSize: 22,
+            color: Color(0xFF00FF00),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Arial',
+            shadows: [
+              Shadow(
+                blurRadius: 3,
+                color: Color(0xFF000000),
+                offset: Offset(2, 2),
+              ),
+            ],
+          ),
+        );
+
+        _xSymbol.textRenderer = TextPaint(
+          style: const TextStyle(
+            fontSize: 20,
+            color: Color(0xFF00FF00),
+            fontWeight: FontWeight.bold,
+            shadows: [
+              Shadow(
+                blurRadius: 2,
+                color: Color(0xFF000000),
+                offset: Offset(1, 1),
+              ),
+            ],
+          ),
+        );
+      } else {
+        _counterText.textRenderer = TextPaint(
+          style: const TextStyle(
+            fontSize: 22,
+            color: Color(0xFFFFFFFF),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Arial',
+            shadows: [
+              Shadow(
+                blurRadius: 3,
+                color: Color(0xFF000000),
+                offset: Offset(2, 2),
+              ),
+            ],
+          ),
+        );
+
+        _slashAndTotal.textRenderer = TextPaint(
+          style: const TextStyle(
+            fontSize: 22,
+            color: Color(0xFFFFFFFF),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Arial',
+            shadows: [
+              Shadow(
+                blurRadius: 3,
+                color: Color(0xFF000000),
+                offset: Offset(2, 2),
+              ),
+            ],
+          ),
+        );
+
+        _xSymbol.textRenderer = TextPaint(
+          style: const TextStyle(
+            fontSize: 20,
+            color: Color(0xFFFFFFFF),
+            fontWeight: FontWeight.bold,
+            shadows: [
+              Shadow(
+                blurRadius: 2,
+                color: Color(0xFF000000),
+                offset: Offset(1, 1),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 
@@ -128,16 +255,11 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
   void _animateCollection() {
     if (!_isLoaded) return;
 
-    // Para qualquer animação em andamento
     _stopAnimation();
 
-    // Reseta para tamanho original antes de animar
     _fruitEmoji.scale = _originalScale.clone();
-
-    // Animação de escala
     _fruitEmoji.scale = _originalScale * 1.3;
 
-    // Configura o timer para resetar o tamanho após a animação
     _animationTimer = Timer(
       0.15,
       onTick: () {
@@ -153,7 +275,6 @@ class FruitCounter extends Component with HasGameReference<PixelAdventure> {
     if (_animationTimer != null) {
       _animationTimer = null;
     }
-    // Reseta a escala imediatamente
     if (_isLoaded && _fruitEmoji.isMounted) {
       _fruitEmoji.scale = _originalScale.clone();
     }

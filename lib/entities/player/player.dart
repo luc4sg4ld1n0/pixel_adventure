@@ -17,7 +17,7 @@ import 'player_animations.dart';
 class Player extends SpriteAnimationGroupComponent<MainPlayerState>
     with KeyboardHandler, CollisionCallbacks, HasGameReference<PixelAdventure> {
   final String character;
-  Player({super.position, this.character = 'Ninja Frog'});
+  Player({super.position}) : character = GameStateManager.selectedCharacter;
 
   late final PlayerAnimations _animations;
   final Vector2 startingPosition = Vector2.zero();
@@ -281,7 +281,6 @@ class Player extends SpriteAnimationGroupComponent<MainPlayerState>
       position = position + Vector2(32, -32);
     }
 
-    // Animação de desaparecimento
     current = MainPlayerState.disappearing;
     await animationTicker?.completed;
     animationTicker?.reset();
